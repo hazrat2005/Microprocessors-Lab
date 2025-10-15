@@ -1,0 +1,40 @@
+void setup() {
+  Serial.begin(9600);
+
+  uint8_t sum;  //variable to store the sum
+  uint8_t cnt;    //counter variable
+  uint8_t limit; //limit variable 
+
+  asm volatile(
+    "clr %[sum]        \n\t"  //clear 'sum' register
+    "ldi %[cnt], 1     \n\t"    //load 1 into counter
+    "ldi %[limit], 10  \n\t" //load 10 into limit
+
+    "loop%=:           \n\t"
+    "add %[sum], %[cnt]\n\t"   //add counter and sum values together
+    "cp  %[cnt], %[limit]\n\t" //compare the counter value to limit
+    "brne cont%=       \n\t" //if cnt doesnt equal limit, go to 'cont' label
+    "rjmp end%=        \n\t"  //else jum to end
+
+    "cont%=:           \n\t"
+    "inc %[cnt]        \n\t" //inrement the counter
+    "rjmp loop%=       \n\t"   //jump back to start of the loop
+
+    "end%=:            \n\t"
+    : [sum]   "=r"(sum),   // output operand of final sum
+      [cnt]   "=r"(cnt),  // output operand of counter value at the end of the loop
+      [limit] "=r"(limit)  // output operand of the limit value
+    :
+    : "cc"
+  );
+//print result
+  Serial.print("Sum = ");
+  Serial.print(sum);
+  Serial.print(" (0x");
+  Serial.print(sum, HEX);
+  Serial.println(")");
+}
+
+void loop() {
+  //empty
+}
