@@ -1,0 +1,30 @@
+
+void setup() {
+  DDRB |= (1 << DDB5);   //set LED as output
+}
+
+void loop() {
+//direct assignment
+  PORTB = 0b00100000;   
+  delay(500);
+  PORTB = 0b00000000;           
+  delay(500);
+
+//masking using OR and AND
+  PORTB |= 0b00100000;  
+  delay(500);
+  PORTB &= 0b11011111; 
+  delay(500);
+
+ //toggling with XOR
+  PORTB ^= 0b00100000;  
+  delay(500);
+  PORTB ^= 0b00100000;  
+  delay(500);
+
+//shifting
+  PORTB = (1 << 5);    
+  delay(500);
+  PORTB = (1 << 0);     
+  delay(500);
+}
